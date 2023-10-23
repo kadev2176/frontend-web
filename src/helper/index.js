@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const Backend_URL = 'http://localhost:5050/';
+const Backend_URL = 'http://3.130.197.185/';
 
 export const getCompanyInfo = async (wallet) => {
     const res = await axios.get(`${Backend_URL}company/info/${wallet}`);
