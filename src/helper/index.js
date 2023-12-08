@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Backend_URL = 'https://shearnode.com/api/v1/';
-// const Backend_URL = 'http://localhost:5050/api/v1/';
+// const Backend_URL = 'http://localhost:5050/';
 
 export const getCompanyInfo = async (wallet) => {
     const res = await axios.get(`${Backend_URL}company/info/${wallet}`);
@@ -40,6 +40,7 @@ export const addProduct = async (data) => {
         alert('product successfully added');
     } catch(err) {
         console.log(err);
+        alert('Failed: ' + err.response.data.message);
     }
 }
 
@@ -83,5 +84,15 @@ export const getProductQRcodes = async (product_id) => {
     } catch (err) {
         console.log(err);
         return [];
+    }
+}
+
+export const uploadFile = async (body) => {
+    try {
+        const res = await axios.post(`${Backend_URL}upload/single`, body);
+        return res.data.url;
+    } catch (error) {
+        console.log(error);
+        return '';
     }
 }

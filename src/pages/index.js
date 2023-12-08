@@ -1,6 +1,6 @@
-import { Box, Button, ImageList, ImageListItem, Table, TextField } from '@mui/material';
+import { Box, Button, ImageList, ImageListItem, Input, Table, TextField } from '@mui/material';
 import react, { useEffect, useState } from 'react';
-import { addProduct, getCompanyProducts, getProductQRcodes, login, productMint, registerCompany } from '../helper';
+import { addProduct, getCompanyProducts, getProductQRcodes, login, productMint, registerCompany, uploadFile } from '../helper';
 import { DataGrid } from '@mui/x-data-grid';
 
 const Page = () => {
@@ -13,6 +13,7 @@ const Page = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [mintAmount, setMintAmout] = useState(0);
     const [qrcodes, setQrCodes] = useState([]);
+    const [productImage, setProductImage] = useState('');
 
     const loginHanlder = async () => {
         const res = await login({name, password});
@@ -25,7 +26,7 @@ const Page = () => {
     }
 
     const addProductHandler = async () => {
-        await addProduct({name: productName, detail: productDetail, company_id: company._id});
+        await addProduct({name: productName, detail: productDetail, company_id: company._id, image_url: productImage});
         const res = await getCompanyProducts({ company_id: company._id });
         const ptmp = res.map((p, i) => ({
             id: i + 1,
@@ -49,8 +50,9 @@ const Page = () => {
 
     const productColumns = [
         { field: 'id', headerName: '#', width: 50 },
-        { field: 'name', headerName: 'Name', width: 200 },
-        { field: 'detail', headerName: 'Details', width: 280 },
+        { field: 'name', headerName: 'Name', width: 150 },
+        { field: 'detail', headerName: 'Details', width: 200 },
+        { field: 'image_url', headerName: 'Image Url', width: 300 },
         { field: 'contract_address', headerName: 'Contract Address', width: 360 }
     ];
 
@@ -73,6 +75,16 @@ const Page = () => {
         }
     }, [selectedProduct]);
 
+    const handleProductImageChange = async (event) => {
+        if (event.target.files && event.target.files[0]) {
+          const file = event.target.files[0];
+          const body = new FormData();
+          body.append("file", file);
+          const res = await uploadFile(body);
+          setProductImage(res);
+        }
+      };
+
     return (
         <Box sx={{ p: 5 }}>
             {!company
@@ -94,6 +106,7 @@ const Page = () => {
                         <br/><br/>
                         <TextField id="outlined-basic" label="Name" variant="outlined" size='small' value={productName} onChange={(e) => setProductName(e.target.value)}/> &nbsp;
                         <TextField id="outlined-basic" label="Detail" variant="outlined" size='small' value={productDetail} onChange={(e) => setProductDetail(e.target.value)}/> &nbsp;
+                        <Input type='file' onChange={handleProductImageChange}/>
                         <Button variant='outlined' onClick={addProductHandler}>Add Product</Button>
                         <br/><br/>
                         <DataGrid
