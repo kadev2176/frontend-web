@@ -132,7 +132,7 @@ const Page = () => {
                         </Box>
                         <Box sx={{ pt: 2 }}>
                             Qr Codes for Selected Product <br/>
-                            Count: {qrcodes.length}
+                            Count: {selectedProduct.total_minted_amount}
                             <ImageList sx={{ width: 1200, height: 450 }} cols={5} rowHeight={230}>
                                 {qrcodes.map((item, i) => (
                                     <ImageListItem key={i}>

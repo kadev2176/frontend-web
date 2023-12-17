@@ -29,7 +29,8 @@ export const registerCompany = async (data) => {
         // updateCompanyStatus(res.data.data.doc);
         return res.data.data.data;
     } catch (err) {
-        console.log(err);
+        console.log(err.response);
+        alert("Failed: " + err.response.data.message);
         return null;
     }
 }
