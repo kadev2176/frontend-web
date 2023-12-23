@@ -26,6 +26,10 @@ const Page = () => {
     }
 
     const addProductHandler = async () => {
+        if (productName == '' || productDetail == '' || productImage == '') {
+            alert('please fill all fields and upload an image');
+            return;
+        }
         await addProduct({name: productName, detail: productDetail, company_id: company._id, image_url: productImage});
         const res = await getCompanyProducts({ company_id: company._id });
         const ptmp = res.map((p, i) => ({
@@ -33,6 +37,10 @@ const Page = () => {
             ...p
         }));
         setProducts(ptmp);
+
+        setProductName('');
+        setProductDetail('');
+        setProductImage('');
     }
 
     useEffect(() => {
