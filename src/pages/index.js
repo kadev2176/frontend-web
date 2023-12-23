@@ -115,7 +115,7 @@ const Page = () => {
                         <TextField id="outlined-basic" label="Name" variant="outlined" size='small' value={productName} onChange={(e) => setProductName(e.target.value)}/> &nbsp;
                         <TextField id="outlined-basic" label="Detail" variant="outlined" size='small' value={productDetail} onChange={(e) => setProductDetail(e.target.value)}/> &nbsp;
                         <Input type='file' onChange={handleProductImageChange}/>
-                        <Button variant='outlined' onClick={addProductHandler}>Add Product</Button>
+                        <Button variant='outlined' onClick={addProductHandler} disabled={!(productName != '' && productDetail != '' && productImage != '')}>Add Product</Button>
                         <br/><br/>
                         <DataGrid
                             rows={products}
