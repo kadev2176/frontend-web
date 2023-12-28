@@ -84,6 +84,7 @@ const Page = () => {
     }, [selectedProduct]);
 
     const handleProductImageChange = async (event) => {
+        event.stopPropagation();
         if (event.target.files && event.target.files[0]) {
           const file = event.target.files[0];
           const body = new FormData();
