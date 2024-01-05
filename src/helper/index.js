@@ -97,3 +97,14 @@ export const uploadFile = async (body) => {
         return '';
     }
 }
+
+export const uploadFiles = async (body) => {
+    try {
+        const res = await axios.post(`${Backend_URL}upload/multiple`, body);
+        
+        return res.data.files;
+    } catch (error) {
+        console.log(error);
+        return '';
+    }
+}
