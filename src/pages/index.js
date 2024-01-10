@@ -15,6 +15,10 @@ const Page = () => {
     const [mintAmount, setMintAmout] = useState(0);
     const [qrcodes, setQrCodes] = useState([]);
     const [productImages, setProductImages] = useState([]);
+    const [productFiles, setProductFiles] = useState([]);
+    const [productVideos, setProductVideos] = useState([]);
+    const [updates, setUpdates] = useState(0);
+    console.log(products);
 
     const loginHanlder = async () => {
         const res = await login({name, password});
@@ -31,7 +35,7 @@ const Page = () => {
             alert('please fill all fields and upload an image');
             return;
         }
-        await addProduct({name: productName, model: productModel, detail: productDetail, company_id: company._id, images:productImages});
+        await addProduct({name: productName, model: productModel, detail: productDetail, company_id: company._id, images:productImages, files: productFiles, videos: productVideos});
         const res = await getCompanyProducts({ company_id: company._id });
         const ptmp = res.map((p, i) => ({
             id: i + 1,
@@ -43,6 +47,9 @@ const Page = () => {
         setProductModel('');
         setProductDetail('');
         setProductImages([]);
+        setProductFiles([]);
+        setProductVideos([]);
+        setUpdates(0);
     }
 
     useEffect(() => {
@@ -57,7 +64,6 @@ const Page = () => {
             })()
         }
     }, [company]);
-    console.log(products);
 
     const productColumns = [
         { field: 'id', headerName: '#', width: 50 },
@@ -116,6 +122,38 @@ const Page = () => {
         }
     };
 
+    const handleProductFilesChange = async (event) => {
+        event.stopPropagation();
+        if (event.target.files && event.target.files.length) {
+          
+            const body = new FormData();
+            for (const single_file of event.target.files) {
+                body.append("files", single_file);
+            }
+            const res = await uploadFiles(body);
+            setProductFiles(res);
+        }
+    };
+
+    const handleProductVideoAddClick = () => {
+        let temp = productVideos;
+        temp.push({url: '', description: ''});
+        setProductVideos(temp);
+        setUpdates(updates + 1);
+    }
+
+    const handleProductVideoUrlChange = (e, i) => {
+        let temp = productVideos;
+        temp[i].url = e.target.value;
+        setProductVideos(temp);
+        setUpdates(updates + 1);
+    }
+    const handleProductVideoDescriptionChange = (e, i) => {
+        let temp = productVideos;
+        temp[i].description = e.target.value;
+        setProductVideos(temp);
+        setUpdates(updates + 1);
+    }
     return (
         <Box sx={{ p: 5 }}>
             {!company
@@ -141,8 +179,19 @@ const Page = () => {
                         <br/><br/>
                         <TextField id="outlined-basic" label="Details" variant="outlined" size='small' value={productDetail} onChange={(e) => setProductDetail(e.target.value)} multiline/> &nbsp;
                         <br/><br/>
-                        <input type='file' onChange={handleProductImageChange} multiple/>
+                        Images: <input type='file' onChange={handleProductImageChange} multiple/>
                         <br/><br/>
+                        Files: <input type='file' onChange={handleProductFilesChange} multiple/>
+                        <br/><br/>
+                        Youtube Videos: <Button variant='outlined' onClick={handleProductVideoAddClick}>+</Button>
+                        <br/><br/>
+                        {productVideos.map((video, i) => (
+                            <>
+                                <TextField key={i * 2} id="outlined-basic" label="Url..." variant="outlined" size='small' value={video.url} onChange={(e) => handleProductVideoUrlChange(e, i)} /> &nbsp;
+                                <TextField key={i * 2 + 1} id="outlined-basic" label="Description" variant="outlined" size='small' value={video.description} onChange={(e) => handleProductVideoDescriptionChange(e, i)} /> &nbsp;
+                                <br/><br/>
+                            </>
+                        ))}
                         <Button variant='outlined' onClick={addProductHandler} disabled={!(productName != '' && productDetail != '' && productImages.length > 0)}>Add Product</Button>
                         <br/><br/>
                         <DataGrid
