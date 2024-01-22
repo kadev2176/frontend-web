@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const Backend_URL = 'https://shearnode.com/api/v1/';
-// const Backend_URL = 'http://localhost:5050/';
+// const Backend_URL = 'https://shearnode.com/api/v1/';
+const Backend_URL = 'http://localhost:5050/';
 
 export const getCompanyInfo = async (wallet) => {
     const res = await axios.get(`${Backend_URL}company/info/${wallet}`);
