@@ -77,13 +77,13 @@ const Page = () => {
                 return (<span style={{whiteSpace: "pre-line", padding: 10}}>{data.value}</span>);
             }
         },
-        { field: 'detail', headerName: 'Details', width: 200,
-            renderCell: (data) => {
-                return (<span style={{whiteSpace: "pre-line", padding: 10}}>{data.value}</span>);
-            }
-        },
+        // { field: 'detail', headerName: 'Details', width: 200,
+        //     renderCell: (data) => {
+        //         return (<span style={{whiteSpace: "pre-line", padding: 10}}>{data.value}</span>);
+        //     }
+        // },
         // { field: 'image_url', headerName: 'Files', width: 200 },
-        { field: 'contract_address', headerName: 'Contract Address', width: 360 }
+        // { field: 'contract_address', headerName: 'Contract Address', width: 360 }
     ];
 
     const productSelectHandler = (data) => {
